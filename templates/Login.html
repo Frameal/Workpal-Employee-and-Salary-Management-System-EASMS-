@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WorkPal Login</title>
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      font-family: Arial;
+      background-color: #fdecd2;
+      color: #e78f77;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100vh;
+    }
+
+    .login-container {
+      background-color: #fffcf9;
+      padding: 40px;
+      border-radius: 20px;
+      width: 100%;
+      max-width: 400px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    }
+
+    .login-container h2 {
+      margin-top: 0;
+      margin-bottom: 30px;
+      color: #e78f77;
+      text-align: center;
+    }
+
+    .form-group {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+    }
+
+    .form-group label {
+      width: 30%;
+      font-weight: bold;
+      color: #e78f77;
+    }
+
+    .form-group input[type="text"],
+    .form-group input[type="password"] {
+      width: 65%;
+      padding: 10px;
+      border: none; 
+      border-radius: 8px;
+      font-size: 16px;
+      background-color: #fdecd2; 
+      color: #383838;
+    }
+
+    .form-group input:focus {
+      outline: none;
+    }
+
+    .checkbox-group {
+      display: flex;
+      align-items: center;
+      margin-bottom: 20px;
+      margin-left: 30%;
+      font-size: 14px;
+      color: #767272;
+    }
+
+    .checkbox-group input {
+      margin-right: 10px;
+    }
+
+    .login-button {
+      width: 100%;
+      padding: 12px;
+      background-color: #feded1;
+      border: none;
+      border-radius: 8px;
+      font-weight: bold;
+      font-size: 16px;
+      color: #e78f77;
+    }
+
+    .flash-message {
+      color: red; 
+      text-align: center;
+      margin-bottom: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="login-container">
+<img src="images/logo_login.png" alt="EASMS logo" style="display: block; margin: 0 auto 30px; max-width: 150px; height: auto;">
+    {% with messages = get_flashed_messages() %}
+      {% if messages %}
+        <div class="flash-message">
+          {% for message in messages %}
+            <p>{{ message }}</p>
+          {% endfor %}
+        </div>
+      {% endif %}
+    {% endwith %}
+    <form action="/login" method="POST">
+      <div class="form-group">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username" placeholder="Enter username" required>
+      </div>
+      <div class="form-group">
+        <label for="password">Password:</label>
+        <input type="password" id="password" name="password" placeholder="Enter password" required>
+      </div>
+      <div class="checkbox-group">
+        <input type="checkbox" id="show-password" onclick="togglePassword()">
+        <label for="show-password">Show Password</label>
+      </div>
+      <button type="submit" class="login-button">Login</button>
+    </form>
+  </div>
+
+  <script>
+    function togglePassword() {
+      const passwordField = document.getElementById("password");
+      passwordField.type = passwordField.type === "password" ? "text" : "password";
+    }
+  </script>
+</body>
+</html>

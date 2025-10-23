@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WorkPal Salary</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background-color: #fffcf9;
+      color: #e78f77;
+      display: flex;
+    }
+
+    .sidebar-container {
+      width: 240px;
+      background-color: #fdecd2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 30px 20px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .sidebar-logo-img {
+      width: 120px;
+      height: auto;
+      margin-bottom: 10px;
+      margin-left: 20px;
+    }
+
+    .nav-links {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #e78f77;
+      font-weight: bold;
+      font-size: 20px;
+      padding: 5px;
+    }
+
+    .nav-link img {
+      margin-right: 8px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .nav-link:hover {
+      text-decoration: underline;
+    }
+
+    .nav-section-title {
+      color: #383838;
+      font-weight: bold;
+      padding: 5px 0;
+      margin-top: 20px; 
+      font-size: 18px; 
+      text-align: left; 
+    }
+
+    .logout-section {
+      font-size: 18px;
+      margin-top: 40px; 
+    }
+
+    .logout-link {
+      text-decoration: none;
+      color: #e78f77;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      padding: 5px;
+    }
+
+    .logout-link img {
+      margin-right: 8px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .logout-link:hover {
+      text-decoration: underline;
+    }
+
+    .container {
+      margin-left: 240px;
+      padding: 30px;
+      flex-grow: 1;
+    }
+
+    .form-section {
+      background-color: #fdecd2;
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 20px;
+      display: flex;
+      justify-content: space-between;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .left, .right {
+      width: 48%;
+    }
+
+    .form-group {
+      margin-bottom: 15px;
+    }
+
+    label {
+      display: block;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    input {
+      width: 100%;
+      padding: 6px 10px;
+      border: none;
+      border-radius: 5px;
+      font-size: 14px;
+      height: 30px;
+    }
+
+    .deduction-section, .net-salary {
+      background-color: #fdecd2;
+      border-radius: 20px;
+      padding: 25px;
+      margin-bottom: 20px;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .deduction-group {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+    }
+
+    .deduction-item {
+      width: 48%;
+      margin-bottom: 15px;
+    }
+
+    .net-salary {
+      display: flex;
+      justify-content: flex-end;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .net-salary input {
+      width: 150px;
+      text-align: right;
+    }
+
+  </style>
+</head>
+<body>
+  <div class="sidebar-container">
+    <div class="sidebar-header">
+      <img src="images/logo_employee.png" alt="EASMS Logo" class="sidebar-logo-img" />
+      <div class="nav-links">
+        <a class="nav-link" href="{{ url_for('dashboard', employee_id=session['user_id']) }}">
+          <img src="images/dashboard.png" />
+          <span>Dashboard</span>
+        </a>
+        <div class="nav-section-title">Management</div>
+        <a class="nav-link" href="{{ url_for('attendance', employee_id=session['user_id']) }}">
+          <img src="images/attendance.png" alt="Attendance" />
+          <span>Attendance</span>
+        </a>
+        <a class="nav-link" href="{{ url_for('salary', employee_id=session['user_id']) }}">
+          <img src="images/salary.png" alt="Salary" />
+          <span>Salary</span>
+        </a>
+      </div>
+    </div>
+    <div class="logout-section">
+      <a class="logout-link" href="{{ url_for('home') }}">
+        <img src="images/logout.png" alt="Exit Admin" />
+        <span>Log out</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="container">
+    <form action="{{ url_for('salary', employee_id=session['user_id']) }}" method="POST">
+      <div class="form-section">
+        <div class="left">
+          <div class="form-group">
+            <label>Employee ID:</label>
+            <input type="text" name="employee_id" value="{{ data[0] }}">
+          </div>
+          <div class="form-group">
+            <label>Last Name:</label>
+            <input type="text" name="last_name" value="{{ data[1] }}" readonly>
+          </div>
+          <div class="form-group">
+            <label>Basic Salary:</label>
+            <input type="text" name="basic_salary" value="{{ data[5] }}" readonly>
+          </div>
+          <div class="form-group">
+            <label>Basic Pay Per Hour:</label>
+            <input type="text" name="basic_per_hour" value="{{ data[6] }}" readonly>
+          </div>
+          <div class="form-group">
+            <label>Overtime Pay Per Hour:</label>
+            <input type="text" name="overtime_per_hour" value="{{ data[7] }}" readonly>
+          </div>
+        </div>
+
+        <div class="right">
+          <div class="form-group">
+            <label>Total Work Hours:</label>
+            <input type="text" name="work_hours" value="{{ data[3] }}">
+          </div>
+          <div class="form-group">
+            <label>Total Overtime Hours:</label>
+            <input type="text" name="overtime_hours" value="{{ data[4] }}">
+          </div>
+          <div class="gross-salary" style="display: flex; justify-content: flex-end; align-items: center; gap: 10px; margin-top: 200px;">
+            <label>Gross Salary:</label>
+            <input type="text" name="gross_salary" value="{{ data[8] }}" style="width: 150px; text-align: right;" readonly>
+          </div>
+        </div>
+      </div>
+
+      <div class="deduction-section">
+        <div class="form-group"><strong>Deduction:</strong></div>
+        <div class="deduction-group">
+          <div class="deduction-item">
+            <label>PAG-IBIG:</label>
+            <input type="text" name="pagibig" value="{{ data[9] }}">
+          </div>
+          <div class="deduction-item">
+            <label>Philhealth:</label>
+            <input type="text" name="philhealth" value="{{ data[10] }}">
+          </div>
+          <div class="deduction-item">
+            <label>SSS:</label>
+            <input type="text" name="sss" value="{{ data[11] }}">
+          </div>
+          <div class="deduction-item">
+            <label>Tax:</label>
+            <input type="text" name="tax" value="{{ data[12] }}">
+          </div>
+        </div>
+        <div class="total-deduction" style="display: flex; justify-content: flex-end; align-items: center; gap: 10px;">
+          <label>Total Deduction:</label>
+          <input type="text" name="total_deduction" value="{{ data[13] }}" style="width: 150px; text-align: right;" readonly>
+        </div>
+        <div class="form-group" style="width: 100%;">
+          <label>Bonus:</label>
+          <input type="text" name="bonus" value="{{ data[14] }}">
+        </div>
+      </div>
+
+      <div class="net-salary">
+        <label>Net Salary:</label>
+        <input type="text" name="net_salary" value="{{ data[15] }}" readonly>
+      </div>
+
+    </form>
+  </div>
+</body>
+</html>

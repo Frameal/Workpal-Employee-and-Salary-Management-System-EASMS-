@@ -1,0 +1,661 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Admin Attendance</title>
+  <style>
+  * {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+  }
+
+  body {
+    background-color: #fffcf9;
+  }
+
+  .navbar {
+    background-color: #fdecd2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    border-bottom: 1px solid #f5c56d;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .navbar-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-left img.logo-img {
+    width: 120px;
+    height: auto;
+    margin-bottom: 1px;
+    margin-left: 20px;
+    margin-top: 10px;
+  }
+
+  .navbar-menu {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
+
+  .navbar-menu img {
+    width: 25px;
+    height: 25px;
+  }
+
+  .navbar-menu a {
+    text-decoration: none;
+    color: #e78f77;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px;
+    border-radius: 12px;
+    transition: background-color 0.3s;
+  }
+
+  .navbar-menu a:hover {
+    background-color: #feded1;
+  }
+
+  .main-container {
+    padding: 40px 60px;
+    margin-top: 30px;
+  }
+
+  h1 {
+    text-align: center;
+    color: #e78f77;
+    margin-bottom: 30px;
+  }
+
+  .search-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-bottom: 40px;
+    gap: 10px;
+  }
+
+  .search-container label {
+    background-color: #fdecd2;
+    padding: 10px 20px;
+    border-radius: 10px 0 0 10px;
+    color: #e78f77;
+    font-weight: bold;
+  }
+
+  .search-container input {
+    padding: 10px;
+    width: 300px;
+    border: 1px solid #ccc;
+  }
+
+  .search-container button {
+    padding: 10px 20px;
+    background-color: #feded1;
+    color: #e78f77;
+    border: none;
+    border-radius: 0 10px 10px 0;
+    cursor: pointer;
+  }
+
+  .search-container button:hover {
+    background-color: #e78f77;
+    color: white;
+  }
+
+  .search-container .show-all-btn {
+    padding: 10px 20px;
+    background-color: #e78f77;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    margin-left: 10px;
+  }
+
+  .search-container .show-all-btn:hover {
+    background-color: #d67966;
+  }
+
+  .results-box {
+    width: 100%;
+    height: 300px;
+    border: 1px solid #767272;
+    border-radius: 10px;
+    margin-bottom: 40px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    overflow-y: auto;
+    background-color: white;
+  }
+
+  .attendance-table {
+    width: 100%;
+    border-collapse: collapse;
+  }
+
+  .attendance-table th,
+  .attendance-table td {
+    padding: 12px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  .attendance-table th {
+    background-color: #fdecd2;
+    color: #e78f77;
+    font-weight: bold;
+    position: sticky;
+    top: 0;
+  }
+
+  .attendance-table td {
+    color: #383838;
+  }
+
+  .attendance-table tr:hover {
+    background-color: #fffcf9;
+    cursor: pointer;
+  }
+
+  .form-row {
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    gap: 20px;
+    margin-top: 30px;
+  }
+
+  .form-box {
+    background-color: #fdecd2;
+    padding: 30px;
+    border-radius: 16px;
+    width: 50%;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 10px;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .form-field {
+    width: 30%;
+    margin-bottom: 20px;
+    color: #e78f77;
+    font-weight: bold;
+  }
+
+  .form-field input {
+    width: 100%;
+    padding: 6px 10px;
+    border: none;
+    border-radius: 5px;
+    font-size: 14px;
+    height: 30px;
+  }
+
+  .button-group {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 10px 20px;
+    margin-top: 10px;
+  }
+
+  .button-group button {
+    background-color: #feded1;
+    color: #e78f77;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 12px;
+    font-size: 14px;
+    cursor: pointer;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    transition: background-color 0.3s;
+  }
+
+  .button-group button:hover {
+    background-color: #e78f77;
+    color: white;
+  }
+
+  .message {
+    text-align: center;
+    padding: 10px;
+    margin: 10px 0;
+    border-radius: 8px;
+  }
+
+  .message.success {
+    background-color: #d4edda;
+    color: #155724;
+    border: 1px solid #c3e6cb;
+  }
+
+  .message.error {
+    background-color: #f8d7da;
+    color: #721c24;
+    border: 1px solid #f5c6cb;
+  }
+
+  .no-data {
+    text-align: center;
+    color: #999;
+    padding: 20px;
+    font-style: italic;
+  }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="navbar-left">
+      <img src="images/logo_admin.png" alt="EASMS Logo" class="logo-img" />
+    </div>
+    <div class="navbar-menu">
+      <a href="{{ url_for('admin_dashboard', admin_id=admin_id) }}"><img src="images/dashboard.png" alt="Dashboard Icon"/> Dashboard</a>
+      <a href="{{ url_for('admin_attendance', admin_id=admin_id) }}"><img src="images/attendance.png" alt="Attendance Icon"/> Attendance</a>
+      <a href="{{ url_for('admin_salary', admin_id=admin_id) }}"><img src="images/salary.png" alt="Salary Icon"/> Salary</a>
+      <a href="{{ url_for('admin_employee_data', admin_id=admin_id) }}"><img src="images/employee.png" alt="Employee Icon"/> Employee</a>
+      <a href="{{ url_for('home') }}"><img src="images/logout.png" alt="Exit Admin"/> Log out</a>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <h1>Attendance Management</h1>
+
+    <div id="message-container"></div>
+
+    <div class="search-container">  
+      <label for="search">Search Employee ID:</label>
+      <input type="text" id="search" placeholder="Enter Employee ID" />
+      <button onclick="searchAttendance()">Search</button>
+      <button class="show-all-btn" onclick="showAllAttendance()">Show All</button>
+    </div>
+
+    <div class="results-box">
+      <table class="attendance-table" id="attendance-table">
+        <thead>
+          <tr>
+            <th>Attendance ID</th>
+            <th>Employee ID</th>
+            <th>Last Name</th>
+            <th>Date In</th>
+            <th>Time In</th>
+            <th>Date Out</th>
+            <th>Time Out</th>
+            <th>Hours Worked</th>
+            <th>Overtime Hours</th>
+          </tr>
+        </thead>
+        <tbody id="attendance-tbody">
+          {% if attendance_logs %}
+            {% for log in attendance_logs %}
+            <tr onclick="selectRecord(this)" data-attendance-id="{{ log.attendance_id }}" 
+                data-employee-id="{{ log.employee_id }}" data-last-name="{{ log.last_name }}"
+                data-date-in="{{ log.date_in_formatted }}" data-time-in="{{ log.time_in_formatted }}"
+                data-date-out="{{ log.date_out_formatted }}" data-time-out="{{ log.time_out_formatted }}"
+                data-hours-worked="{{ log.hours_worked_formatted }}" data-hours-overtime="{{ log.hours_overtime_formatted }}">
+              <td>{{ log.attendance_id }}</td>
+              <td>{{ log.employee_id }}</td>
+              <td>{{ log.last_name }}</td>
+              <td>{{ log.date_in_formatted }}</td>
+              <td>{{ log.time_in_formatted }}</td>
+              <td>{{ log.date_out_formatted }}</td>
+              <td>{{ log.time_out_formatted }}</td>
+              <td>{{ log.hours_worked_formatted }}</td>
+              <td>{{ log.hours_overtime_formatted }}</td>
+            </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="9" class="no-data">No attendance records found</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+
+    <div class="form-row">
+      <div class="form-box">
+        <div class="form-field">
+          <label>Attendance ID:</label>
+          <input type="text" id="attendance-id" >
+        </div>
+        <div class="form-field">
+          <label>Employee ID:</label>
+          <input type="text" id="employee-id" onblur="fetchEmployeeName()">
+        </div>
+        <div class="form-field">
+          <label>Last Name:</label>
+          <input type="text" id="last-name" >
+        </div>
+        <div class="form-field">
+          <label>Date In:</label>
+          <input type="date" id="date-in" onchange="calculateHours()">
+        </div>
+        <div class="form-field">
+          <label>Time In:</label>
+          <input type="time" id="time-in" onchange="calculateHours()">
+        </div>
+        <div class="form-field">
+          <label>Hours Worked:</label>
+          <input type="number" id="hours-worked" step="0.01" readonly>
+        </div>
+        <div class="form-field">
+          <label>Date Out:</label>
+          <input type="date" id="date-out" onchange="calculateHours()">
+        </div>
+        <div class="form-field">
+          <label>Time Out:</label>
+          <input type="time" id="time-out" onchange="calculateHours()">
+        </div>
+        <div class="form-field">
+          <label>Overtime Hours:</label>
+          <input type="number" id="overtime-hours" step="0.01" readonly>
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button onclick="selectRecord(selectedRow)">SELECT</button>
+        <button onclick="updateRecord()">UPDATE</button>
+        <button onclick="newRecord()">NEW</button>
+        <button onclick="clearForm()">CLEAR</button>
+        <button onclick="addRecord()">ADD</button>
+        <button onclick="deleteRecord()">DELETE</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let selectedRow = null;
+const adminId = { admin_id, tojson };
+
+
+    function showMessage(message, type) {
+      const container = document.getElementById('message-container');
+      container.innerHTML = `<div class="message ${type}">${message}</div>`;
+      setTimeout(() => container.innerHTML = '', 5000);
+    }
+
+    function searchAttendance() {
+      const employeeId = document.getElementById('search').value.trim();
+      
+      if (!employeeId) {
+        showMessage('Please enter an Employee ID', 'error');
+        return;
+      }
+
+      fetch(`/search_attendance/${adminId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ employee_id: employeeId })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          updateTable(data.data);
+          showMessage(`Found ${data.data.length} record(s) for Employee ID: ${employeeId}`, 'success');
+        } else {
+          showMessage(data.message, 'error');
+        }
+      })
+      .catch(error => {
+        showMessage('Error searching attendance: ' + error, 'error');
+      });
+    }
+
+    function showAllAttendance() {
+      window.location.reload();
+    }
+
+    function updateTable(logs) {
+      const tbody = document.getElementById('attendance-tbody');
+      tbody.innerHTML = '';
+
+      if (logs.length === 0) {
+        tbody.innerHTML = '<tr><td colspan="9" class="no-data">No attendance records found</td></tr>';
+        return;
+      }
+
+      logs.forEach(log => {
+        const row = tbody.insertRow();
+        row.onclick = () => selectRecord(row);
+        row.setAttribute('data-attendance-id', log.attendance_id);
+        row.setAttribute('data-employee-id', log.employee_id);
+        row.setAttribute('data-last-name', log.last_name);
+        row.setAttribute('data-date-in', log.date_in);
+        row.setAttribute('data-time-in', log.time_in);
+        row.setAttribute('data-date-out', log.date_out);
+        row.setAttribute('data-time-out', log.time_out);
+        row.setAttribute('data-hours-worked', log.hours_worked);
+        row.setAttribute('data-hours-overtime', log.hours_overtime);
+
+        row.innerHTML = `
+          <td>${log.attendance_id}</td>
+          <td>${log.employee_id}</td>
+          <td>${log.last_name}</td>
+          <td>${log.date_in}</td>
+          <td>${log.time_in}</td>
+          <td>${log.date_out}</td>
+          <td>${log.time_out}</td>
+          <td>${log.hours_worked}</td>
+          <td>${log.hours_overtime}</td>
+        `;
+      });
+    }
+
+function selectRecord(row) {
+
+  if (!row && selectedRow) {
+    row = selectedRow;
+  }
+
+  if (!row) {
+    showMessage('Please click on a record to select it', 'error');
+    return;
+  }
+
+  if (selectedRow && selectedRow !== row) {
+    selectedRow.style.backgroundColor = '';
+    selectedRow.style.color = '';
+  }
+
+  selectedRow = row;
+  row.style.backgroundColor = '#e78f77';
+  row.style.color = 'white';
+
+  document.getElementById('attendance-id').value = row.getAttribute('data-attendance-id') || '';
+  document.getElementById('employee-id').value = row.getAttribute('data-employee-id') || '';
+  document.getElementById('last-name').value = row.getAttribute('data-last-name') || '';
+  document.getElementById('date-in').value = row.getAttribute('data-date-in') || '';
+  document.getElementById('time-in').value = row.getAttribute('data-time-in') || '';
+  document.getElementById('date-out').value = row.getAttribute('data-date-out') || '';
+  document.getElementById('time-out').value = row.getAttribute('data-time-out') || '';
+  document.getElementById('hours-worked').value = parseFloat(row.getAttribute('data-hours-worked')) || 0;
+  document.getElementById('overtime-hours').value = parseFloat(row.getAttribute('data-hours-overtime')) || 0;
+  
+  showMessage('Record selected successfully', 'success');
+}
+
+    function fetchEmployeeName() {
+      const employeeId = document.getElementById('employee-id').value.trim();
+      
+      if (!employeeId) {
+        document.getElementById('last-name').value = '';
+        return;
+      }
+
+      fetch(`/get_employee_name/${adminId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ employee_id: employeeId })
+      })
+      .then(response => response.json())
+      .then(data => {
+        if (data.success) {
+          document.getElementById('last-name').value = data.last_name;
+        } else {
+          document.getElementById('last-name').value = '';
+          showMessage(data.message, 'error');
+        }
+      })
+      .catch(error => {
+        document.getElementById('last-name').value = '';
+        showMessage('Error fetching employee name: ' + error, 'error');
+      });
+    }
+
+    function calculateHours() {
+      const dateIn = document.getElementById('date-in').value;
+      const timeIn = document.getElementById('time-in').value;
+      const dateOut = document.getElementById('date-out').value;
+      const timeOut = document.getElementById('time-out').value;
+
+      if (dateIn && timeIn && dateOut && timeOut) {
+        try {
+          const timeInDt = new Date(`${dateIn}T${timeIn}`);
+          let timeOutDt = new Date(`${dateOut}T${timeOut}`);
+
+          if (timeOutDt < timeInDt) {
+            timeOutDt.setDate(timeOutDt.getDate() + 1);
+          }
+
+          const duration = (timeOutDt - timeInDt) / (1000 * 60 * 60); // hours
+          const regularHours = Math.min(duration, 8.0);
+          const overtimeHours = Math.max(0, duration - 8.0);
+
+          document.getElementById('hours-worked').value = regularHours.toFixed(2);
+          document.getElementById('overtime-hours').value = overtimeHours.toFixed(2);
+        } catch (error) {
+          console.error('Error calculating hours:', error);
+        }
+      }
+    }
+
+    function newRecord() {
+      clearForm();
+      showMessage('Ready to add new record', 'success');
+    }
+
+    function clearForm() {
+      document.getElementById('attendance-id').value = '';
+      document.getElementById('employee-id').value = '';
+      document.getElementById('last-name').value = '';
+      document.getElementById('date-in').value = '';
+      document.getElementById('time-in').value = '';
+      document.getElementById('date-out').value = '';
+      document.getElementById('time-out').value = '';
+      document.getElementById('hours-worked').value = '';
+      document.getElementById('overtime-hours').value = '';
+
+      if (selectedRow) {
+        selectedRow.style.backgroundColor = '';
+        selectedRow.style.color = '';
+        selectedRow = null;
+      }
+    }
+
+    function addRecord() {
+      const data = getFormData();
+      
+      if (!validateFormData(data)) {
+        return;
+      }
+
+      manageAttendance('add', data);
+    }
+
+    function updateRecord() {
+      if (!selectedRow) {
+        showMessage('Please select a record to update', 'error');
+        return;
+      }
+
+      const data = getFormData();
+      data.attendance_id = document.getElementById('attendance-id').value;
+      
+      if (!validateFormData(data)) {
+        return;
+      }
+
+      manageAttendance('update', data);
+    }
+
+    function deleteRecord() {
+      if (!selectedRow) {
+        showMessage('Please select a record to delete', 'error');
+        return;
+      }
+
+      if (confirm('Are you sure you want to delete this attendance record?')) {
+        const data = { attendance_id: document.getElementById('attendance-id').value };
+        manageAttendance('delete', data);
+      }
+    }
+
+    function getFormData() {
+      return {
+        employee_id: document.getElementById('employee-id').value,
+        date_in: document.getElementById('date-in').value,
+        time_in: document.getElementById('time-in').value,
+        date_out: document.getElementById('date-out').value,
+        time_out: document.getElementById('time-out').value,
+        hours_worked: parseFloat(document.getElementById('hours-worked').value) || 0,
+        hours_overtime: parseFloat(document.getElementById('overtime-hours').value) || 0
+      };
+    }
+
+    function validateFormData(data) {
+      if (!data.employee_id) {
+        showMessage('Employee ID is required', 'error');
+        return false;
+      }
+      if (!data.date_in) {
+        showMessage('Date In is required', 'error');
+        return false;
+      }
+      if (!data.time_in) {
+        showMessage('Time In is required', 'error');
+        return false;
+      }
+      return true;
+    }
+
+    function manageAttendance(action, data) {
+      fetch(`/manage_attendance/${adminId}`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ action: action, data: data })
+      })
+      .then(response => response.json())
+      .then(result => {
+        if (result.success) {
+          showMessage(result.message, 'success');
+          setTimeout(() => location.reload(), 1500);
+        } else {
+          showMessage(result.message, 'error');
+        }
+      })
+      .catch(error => {
+        showMessage('Error: ' + error, 'error');
+      });
+    }
+  </script>
+</body>
+</html>

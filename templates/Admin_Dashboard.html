@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Admin Dashboard</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: Arial;
+    }
+
+    body {
+      background-color: #fffcf9;
+      color: #e78f77;
+    }
+
+    .navbar {
+      background-color: #fdecd2;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 8px 16px;
+      border-bottom: 1px solid #f5c56d;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .navbar-left {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
+
+    .navbar-left img.logo-img {
+      width: 120px;
+      height: auto;
+      margin-bottom: 1px;
+      margin-left: 20px;
+      margin-top: 10px;
+    }
+
+    .navbar-menu {
+      display: flex;
+      gap: 30px;
+      align-items: center;
+    }
+
+    .navbar-menu img {
+      width: 25px;
+      height: 25px;
+    }
+
+    .navbar-menu a {
+      text-decoration: none;
+      color: #e78f77;
+      font-size: 16px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px;
+      border-radius: 12px;
+      transition: background-color 0.3s;
+    }
+
+    .navbar-menu a:hover {
+      background-color: #feded1;
+    }
+
+    .main-container {
+      padding: 80px 130px;
+      background-color: #fffcf9;
+    }
+
+    .main-container h1 {
+      font-size: 24px;
+      margin-bottom: 30px;
+    }
+
+    .welcome-box {
+      background-color: #fdecd2;
+      padding: 40px 50px;
+      border-radius: 20px;
+      margin-bottom: 30px;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .welcome-box h2 {
+      color: #e78f77;
+      font-size: 20px;
+      margin-bottom: 5px;
+    }
+
+    .welcome-box p {
+      color: #383838;
+      font-size: 18px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 20px;
+    }
+
+    .card {
+      background-color: #feded1;
+      border-radius: 20px;
+      padding: 30px;
+      color: #e78f77;
+      font-weight: bold;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .card span {
+      display: block;
+      margin-top: 8px;
+      font-weight: normal;
+      font-size: 18px;
+      color: #383838;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="navbar-left">
+      <img src="images/logo_admin.png" alt="EASMS Logo" class="logo-img" />
+    </div>
+    <div class="navbar-menu">
+      <a href="{{ url_for('admin_dashboard', admin_id=admin_id) }}"><img src="images/dashboard.png" alt="Dashboard Icon"/> Dashboard</a>
+      <a href="{{ url_for('admin_attendance', admin_id=admin_id) }}"><img src="images/attendance.png" alt="Attendance Icon"/> Attendance</a>
+      <a href="{{ url_for('admin_salary', admin_id=admin_id) }}"><img src="images/salary.png" alt="Salary Icon"/> Salary</a>
+      <a href="{{ url_for('admin_employee_data', admin_id=admin_id) }}"><img src="images/employee.png" alt="Employee Icon"/> Employee</a>
+      <a href="{{ url_for('home') }}"><img src="images/logout.png" alt="Exit Admin"/> Log out</a>
+    </div>
+  </div>
+  <div class="main-container">
+    <h1>Dashboard</h1>
+
+    <div class="welcome-box">
+      <h2>Hello, Administrator {{ name }}</h2>
+      <p>You can edit and update your employee's data and information here.</p>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        Total Employee Accounts
+        <span>{{ employee_count }}</span>
+      </div>
+      <div class="card">
+        Current Month & Year:
+        <span>{{ current_month }}</span>
+      </div>
+      <div class="card">
+        Total Admin Accounts
+        <span>{{ admin_count }}</span>
+      </div>
+      <div class="card">
+        Total Accounts
+        <span>{{ total_accounts }}</span>
+      </div>
+    </div>
+  </div>
+
+</body>
+</html>

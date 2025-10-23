@@ -1,0 +1,605 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Employee Data Management</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: Arial, sans-serif;
+    }
+
+    body {
+      background-color: #fffcf9;
+    }
+
+  .navbar {
+    background-color: #fdecd2;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 8px 16px;
+    border-bottom: 1px solid #f5c56d;
+    box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+  }
+
+  .navbar-left {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .navbar-left img.logo-img {
+    width: 120px;
+    height: auto;
+    margin-bottom: 1px;
+    margin-left: 20px;
+    margin-top: 10px;
+  }
+
+  .navbar-menu {
+    display: flex;
+    gap: 30px;
+    align-items: center;
+  }
+
+  .navbar-menu img {
+    width: 25px;
+    height: 25px;
+  }
+
+  .navbar-menu a {
+    text-decoration: none;
+    color: #e78f77;
+    font-size: 16px;
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    padding: 10px;
+    border-radius: 12px;
+    transition: background-color 0.3s;
+  }
+
+  .navbar-menu a:hover {
+    background-color: #feded1;
+  }
+
+    .main-container {
+      padding: 40px 60px;
+      margin-top: 30px;
+    }
+
+    h1 {
+      text-align: center;
+      color: #e78f77;
+      margin-bottom: 30px;
+    }
+
+    .search-container {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      margin-bottom: 40px;
+      
+    }
+
+    .search-container label {
+      background-color: #fdecd2;
+      padding: 10px 20px;
+      border-radius: 10px 0 0 10px;
+      color: #e78f77;
+      font-weight: bold;
+    }
+
+    .search-container input {
+      padding: 10px;
+      width: 300px;
+      border: 1px solid #ccc;
+    }
+
+    .search-container button {
+      padding: 10px 20px;
+      background-color: #feded1;
+      color: #e78f77;
+      border: none;
+      border-radius: 0 10px 10px 0;
+      cursor: pointer;
+    }
+
+.results-box {
+  width: 100%;
+  height: 300px;
+  border: 1px solid #767272;
+  border-radius: 10px;
+  margin-bottom: 40px;
+  box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+  overflow-y: auto;
+  overflow-x: auto;
+  background-color: white;
+}
+
+.employee-table {
+  width: 100%;
+  border-collapse: collapse;
+  min-width: 800px;
+}
+
+.employee-table th,
+.employee-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.employee-table th {
+  background-color: #fdecd2;
+  color: #e78f77;
+  font-weight: bold;
+  position: sticky;
+  top: 0;
+}
+
+.employee-table td {
+  color: #383838;
+}
+
+.employee-table tr:hover {
+  background-color: #fffcf9;
+  cursor: pointer;
+}
+
+.no-data {
+  text-align: center;
+  color: #999;
+  padding: 20px;
+  font-style: italic;
+}
+
+    .form-row {
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      gap: 20px;
+      margin-top: 30px;
+    }
+
+    .form-box {
+      background-color: #fdecd2;
+      padding: 30px;
+      border-radius: 16px;
+      width: 50%;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: flex-start;
+      gap: 10px;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .form-field {
+      width: 30%;
+      margin-bottom: 20px;
+      color: #e78f77;
+      font-weight: bold;
+      
+    }
+
+    .form-field input {
+      width: 100%;
+      padding: 6px 10px;
+      border: none; 
+      border-radius: 5px;
+      font-size: 14px; 
+      height: 30px; 
+    }
+
+    .button-group {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 20px;
+      margin-top: 10px;
+      
+    }
+
+    .button-group button {
+      background-color: #feded1;
+      color: #e78f77;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 12px;
+      font-size: 14px;
+      cursor: pointer;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <div class="navbar">
+    <div class="navbar-left">
+      <img src="images/logo_admin.png" alt="EASMS Logo" class="logo-img" />
+    </div>
+    <div class="navbar-menu">
+      <a href="{{ url_for('admin_dashboard', admin_id=admin_id) }}"><img src="images/dashboard.png" alt="Dashboard Icon"/> Dashboard</a>
+      <a href="{{ url_for('admin_attendance', admin_id=admin_id) }}"><img src="images/attendance.png" alt="Attendance Icon"/> Attendance</a>
+      <a href="{{ url_for('admin_salary', admin_id=admin_id) }}"><img src="images/salary.png" alt="Salary Icon"/> Salary</a>
+      <a href="{{ url_for('admin_employee_data', admin_id=admin_id) }}"><img src="images/employee.png" alt="Employee Icon"/> Employee</a>
+      <a href="{{ url_for('home') }}"><img src="images/logout.png" alt="Exit Admin"/> Log out</a>
+    </div>
+  </div>
+
+  <div class="main-container">
+    <h1>Employee Data Management</h1>
+
+    <div class="search-container">  
+      <label for="search">Search Employee ID:</label>
+      <input type="text" id="search" />
+      <button>Search</button>
+    </div>
+
+    <div class="results-box"></div>
+
+    <div class="form-row">
+      <div class="form-box">
+        <div class="form-field">
+          <label>Employee ID:</label>
+          <input type="text" />
+        </div>
+        <div class="form-field">
+          <label>First Name:</label>
+          <input type="text" />
+        </div>
+        <div class="form-field">
+          <label>Last Name:</label>
+          <input type="text" />
+        </div>
+<div class="form-field">
+  <label>Birthdate:</label>
+  <input type="date" />
+</div>
+        <div class="form-field">
+          <label>Contact Number:</label>
+          <input type="text" />
+        </div>
+        <div class="form-field">
+          <label>Address:</label>
+          <input type="text" />
+        </div>
+        <div class="form-field">
+          <label>Position:</label>
+          <input type="text" />
+        </div>
+        <div class="form-field">
+          <label>Username:</label>
+          <input type="text" />
+        </div>
+        <div class="form-field">
+          <label>Password:</label>
+          <input type="text" />
+        </div>
+      </div>
+
+      <div class="button-group">
+        <button>SELECT</button>
+        <button>UPDATE</button>
+        <button>NEW</button>
+        <button>CLEAR</button>
+        <button>ADD</button>
+        <button>DELETE</button>
+      </div>
+    </div>
+  </div>
+  <script>
+let currentEmployees = [];
+let selectedEmployee = null;
+
+document.addEventListener('DOMContentLoaded', function() {
+    loadAllEmployees();
+});
+
+function loadAllEmployees() {
+    fetch(`/get_all_employees/{{ admin_id }}`)
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                currentEmployees = data.data;
+                displayEmployees(currentEmployees);
+            } else {
+                showError(data.message);
+            }
+        })
+        .catch(error => {
+            showError('Error loading employees: ' + error.message);
+        });
+}
+
+function displayEmployees(employees) {
+    const resultsBox = document.querySelector('.results-box');
+    
+    if (employees.length === 0) {
+        resultsBox.innerHTML = '<div class="no-data">No employees found</div>';
+        return;
+    }
+    
+let html = `
+    <table class="employee-table" id="employee-table">
+        <thead>
+            <tr>
+                <th>Employee ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Position</th>
+                <th>Birthdate</th>
+                <th>Contact Number</th>
+                <th>Address</th>
+                <th>Username</th>
+                <th>Password</th>
+            </tr>
+        </thead>
+        <tbody>
+`;
+
+employees.forEach(emp => {
+    html += `
+        <tr onclick="selectEmployee(${emp.employee_id})" 
+            onmouseover="this.style.backgroundColor='#feded1'"
+            onmouseout="this.style.backgroundColor='white'">
+            <td>${emp.employee_id}</td>
+            <td>${emp.first_name || 'N/A'}</td>
+            <td>${emp.last_name || 'N/A'}</td>
+            <td>${emp.position || 'N/A'}</td>
+            <td>${emp.birthdate || 'N/A'}</td>
+            <td>${emp.contact_number || 'N/A'}</td>
+            <td>${emp.address || 'N/A'}</td>
+            <td>${emp.username || 'N/A'}</td>
+            <td>${emp.password || 'N/A'}</td>
+        </tr>
+    `;
+});
+    
+    html += '</tbody></table>';
+    resultsBox.innerHTML = html;
+}
+
+document.querySelector('.search-container button').addEventListener('click', function() {
+    const searchId = document.getElementById('search').value.trim();
+    
+    if (!searchId) {
+        loadAllEmployees();
+        return;
+    }
+    
+    fetch(`/search_employee/{{ admin_id }}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ employee_id: searchId })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            currentEmployees = [data.data];
+            displayEmployees(currentEmployees);
+            selectEmployee(data.data.employee_id);
+        } else {
+            showError(data.message);
+        }
+    })
+    .catch(error => {
+        showError('Search error: ' + error.message);
+    });
+document.getElementById('search').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') {
+        document.querySelector('.search-container button').click();
+    }
+});
+
+document.getElementById('search').addEventListener('input', function() {
+    if (this.value.trim() === '') {
+        loadAllEmployees();
+        handleClear();
+    }
+});
+});
+
+function selectEmployee(employeeId) {
+    const employee = currentEmployees.find(emp => emp.employee_id === employeeId);
+    if (!employee) return;
+    
+    selectedEmployee = employee;
+    
+    const inputs = document.querySelectorAll('.form-field input');
+    inputs[0].value = employee.employee_id || '';
+    inputs[1].value = employee.first_name || '';
+    inputs[2].value = employee.last_name || '';
+    inputs[3].value = employee.birthdate || '';
+    inputs[4].value = employee.contact_number || '';
+    inputs[5].value = employee.address || '';
+    inputs[6].value = employee.position || '';
+    inputs[7].value = employee.username || '';
+    inputs[8].value = employee.password || '';
+}
+
+document.querySelectorAll('.button-group button').forEach(button => {
+    button.addEventListener('click', function() {
+        const action = this.textContent.toLowerCase();
+        
+        switch(action) {
+            case 'select':
+                handleSelect();
+                break;
+            case 'update':
+                handleUpdate();
+                break;
+            case 'new':
+                handleNew();
+                break;
+            case 'clear':
+                handleClear();
+                break;
+            case 'add':
+                handleAdd();
+                break;
+            case 'delete':
+                handleDelete();
+                break;
+        }
+    });
+});
+
+function handleSelect() {
+    const employeeId = document.querySelector('.form-field input').value;
+    if (!employeeId) {
+        showError('Please enter an Employee ID');
+        return;
+    }
+    
+    const employee = currentEmployees.find(emp => emp.employee_id == employeeId);
+    if (employee) {
+        selectEmployee(employee.employee_id);
+        showSuccess('Employee selected');
+    } else {
+        showError('Employee not found');
+    }
+}
+
+function handleUpdate() {
+    if (!selectedEmployee) {
+        showError('Please select an employee first');
+        return;
+    }
+    
+    const formData = getFormData();
+    
+    fetch(`/manage_employee/{{ admin_id }}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            action: 'update',
+            data: formData
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showSuccess(data.message);
+            loadAllEmployees();
+        } else {
+            showError(data.message);
+        }
+    })
+    .catch(error => {
+        showError('Update error: ' + error.message);
+    });
+}
+
+function handleNew() {
+    handleClear();
+    showSuccess('Ready for new employee entry');
+}
+
+function handleClear() {
+    document.querySelectorAll('.form-field input').forEach(input => {
+        input.value = '';
+    });
+    selectedEmployee = null;
+}
+
+function handleAdd() {
+    const formData = getFormData();
+    
+    if (!formData.first_name || !formData.last_name || !formData.username || !formData.password) {
+        showError('Please fill in required fields: First Name, Last Name, Username, Password');
+        return;
+    }
+    
+    fetch(`/manage_employee/{{ admin_id }}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            action: 'add',
+            data: formData
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showSuccess(data.message);
+            loadAllEmployees();
+            handleClear();
+        } else {
+            showError(data.message);
+        }
+    })
+    .catch(error => {
+        showError('Add error: ' + error.message);
+    });
+}
+
+function handleDelete() {
+    if (!selectedEmployee) {
+        showError('Please select an employee first');
+        return;
+    }
+    
+    if (!confirm('Are you sure you want to delete this employee?')) {
+        return;
+    }
+    
+    fetch(`/manage_employee/{{ admin_id }}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+            action: 'delete',
+            data: { employee_id: selectedEmployee.employee_id }
+        })
+    })
+    .then(response => response.json())
+    .then(data => {
+        if (data.success) {
+            showSuccess(data.message);
+            loadAllEmployees();
+            handleClear();
+        } else {
+            showError(data.message);
+        }
+    })
+    .catch(error => {
+        showError('Delete error: ' + error.message);
+    });
+}
+
+function getFormData() {
+    const inputs = document.querySelectorAll('.form-field input');
+    return {
+        employee_id: inputs[0].value,
+        first_name: inputs[1].value,
+        last_name: inputs[2].value,
+        birthdate: inputs[3].value,
+        contact_number: inputs[4].value,
+        address: inputs[5].value,
+        position: inputs[6].value,
+        username: inputs[7].value,
+        password: inputs[8].value
+    };
+}
+
+function showError(message) {
+    alert('Error: ' + message);
+}
+
+function showSuccess(message) {
+    alert('Success: ' + message);
+}
+</script>
+</body>
+</html>

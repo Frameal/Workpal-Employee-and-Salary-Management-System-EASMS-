@@ -1,0 +1,220 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>WorkPal Dashboard</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;700&display=swap" rel="stylesheet">
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" rel="stylesheet">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      margin: 0;
+      background-color: #fffcf9;
+      color: #e78f77;
+      display: flex;
+    }
+
+    .sidebar-container {
+      width: 240px;
+      background-color: #fdecd2;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 30px 20px;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .sidebar-logo-img {
+      width: 120px;
+      height: auto;
+      margin-bottom: 10px;
+      margin-left: 20px;
+    }
+
+    .nav-links {
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      text-decoration: none;
+      color: #e78f77;
+      font-weight: bold;
+      font-size: 20px;
+      padding: 5px;
+    }
+
+    .nav-link img {
+      margin-right: 8px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .nav-link:hover {
+      text-decoration: underline;
+    }
+
+    .nav-section-title {
+      color: #383838;
+      font-weight: bold;
+      padding: 5px 0;
+      margin-top: 20px; 
+      font-size: 18px; 
+      text-align: left; 
+    }
+
+    .logout-section {
+      font-size: 18px;
+      margin-top: 40px; 
+    }
+
+    .logout-link {
+      text-decoration: none;
+      color: #e78f77;
+      font-weight: bold;
+      display: flex;
+      align-items: center;
+      padding: 5px;
+    }
+
+    .logout-link img {
+      margin-right: 8px;
+      width: 20px;
+      height: 20px;
+    }
+
+    .logout-link:hover {
+      text-decoration: underline;
+    }
+
+    .main-content {
+      margin-left: 240px; 
+      padding: 40px;
+      flex-grow: 1;
+    }
+
+    .main-title {
+      color: #e78f77;
+    }
+
+    .welcome-message {
+      background-color: #fdecd2;
+      padding: 30px;
+      border-radius: 20px;
+      margin: 20px 0;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .welcome-heading {
+      margin: 10;
+      color: #e78f77;
+      font-size: 22px;
+    }
+
+    .welcome-text {
+      margin: 10;
+      color: #383838;
+      font-size: 20px;
+    }
+
+    .info-section {
+      display: flex;
+      gap: 30px;
+      margin-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .info-card {
+      background-color: #feded1;
+      padding: 25px;
+      border-radius: 20px;
+      flex: 1 1 45%;
+      margin-bottom: 20px;
+      box-shadow: 4px 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .info-card h3 {
+      color: #e78f77;
+      margin-bottom: 10px;
+    }
+
+    .info-card p {
+      margin: 8px 0;
+      font-weight: bold;
+      color: #e78f77;
+    }
+
+    .info-card span {
+      font-weight: normal;
+      color: #383838;
+    }
+  </style>
+</head>
+<body>
+  <div class="sidebar-container">
+    <div class="sidebar-header">
+      <img src="images/logo_employee.png" alt="EASMS Logo" class="sidebar-logo-img" />
+      <div class="nav-links">
+        <a class="nav-link" href="{{ url_for('dashboard', employee_id=employee_id) }}">
+          <img src="images/dashboard.png" />
+          <span>Dashboard</span>
+        </a>
+        <div class="nav-section-title">Management</div>
+        <a class="nav-link" href="{{ url_for('attendance', employee_id=employee_id) }}">
+          <img src="images/attendance.png" alt="Attendance" />
+          <span>Attendance</span>
+        </a>
+        <a class="nav-link" href="{{ url_for('salary', employee_id=employee_id) }}">
+          <img src="images/salary.png" alt="Salary" />
+          <span>Salary</span>
+        </a>
+      </div>
+    </div>
+    <div class="logout-section">
+      <a class="logout-link" href="{{ url_for('home') }}">
+        <img src="images/logout.png" alt="Exit Admin" />
+        <span>Log out</span>
+      </a>
+    </div>
+  </div>
+
+  <div class="main-content">
+    <h1 class="main-title">Dashboard</h1>
+    <div class="welcome-message">
+      <h2 class="welcome-heading">Hello, {{ first_name }}!</h2> 
+      <p class="welcome-text">Welcome to WorkPal!</p>
+    </div>
+
+    <p style="color: #383838; text-align: center; margin-top: 40px;">
+      View your Attendance and Finances here!
+    </p>
+
+    <div class="info-section">
+      <div class="info-card">
+        <h3>Profile:</h3>
+        <p>Position: <span>{{ position }}</span></p>
+        <p>Date of Birth: <span>{{ birthdate }}</span></p>
+        <p>Contact: <span>{{ contact_number }}</span></p>
+        <p>Address: <span>{{ address }}</span></p>
+      </div>
+      <div class="info-card">
+        <h3>Summary:</h3>
+        <p>Achieved Hours: <span>{{ achieved_hours }}</span></p>
+        <p>Achieved Net Salary: <span>{{ achieved_net_salary }}</span></p>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

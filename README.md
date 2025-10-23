@@ -1,6 +1,6 @@
 # Employee Attendance and Salary Management System (EASMS)
 
-A web-based employee attendance and salary management project made for **Integrative Programming and Technologies**.  
+A web-based employee attendance and salary management project made for our subject **Integrative Programming and Technologies**.  
 It uses **Python Flask** for the backend and **MySQL** as the database.
 
 ---

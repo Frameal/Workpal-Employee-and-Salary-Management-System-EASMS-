@@ -66,14 +66,13 @@ project-folder/
 │   ├── Employee_Dashboard.html
 │   ├── Employee_Salary.html
 │   └── Login.html
-│
-└── images/
-    ├── attendance.png
-    ├── dashboard.png
-    ├── employee.png
-    ├── logo_admin.png
-    ├── logo_employee.png
-    ├── logo_login.png
-    ├── logout.png
-    └── salary.png
+    └── images/
+       ├── attendance.png
+       ├── dashboard.png
+       ├── employee.png
+       ├── logo_admin.png
+       ├── logo_employee.png
+       ├── logo_login.png
+       ├── logout.png
+       └── salary.png
 ```

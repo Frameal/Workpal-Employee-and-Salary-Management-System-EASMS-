@@ -1,19 +1,19 @@
-# 🧾 Employee Attendance and Salary Management System (EASMS)
+# Employee Attendance and Salary Management System (EASMS)
 
 A web-based employee attendance and salary management project made for **Integrative Programming and Technologies**.  
 It uses **Python Flask** for the backend and **MySQL** as the database.
 
 ---
 
-## ✨ Features
+## Features
 
-### 👨‍💼 Employee Side
+### Employee Side
 - Secure login and personalized dashboard  
 - Record **Time In** and **Time Out**  
 - View attendance logs and total working hours  
 - View computed salary and deductions  
 
-### 🧑‍💻 Admin Side
+### Admin Side
 - Secure admin login  
 - Dashboard with employee and admin statistics  
 - Manage employee attendance records  
@@ -22,7 +22,7 @@ It uses **Python Flask** for the backend and **MySQL** as the database.
 
 ---
 
-## 🖥️ How to Run
+## How to Run
 
 1. Make sure you have **Python 3.8+** installed.  
 2. Install the required dependencies:
@@ -50,7 +50,7 @@ It uses **Python Flask** for the backend and **MySQL** as the database.
 
 ---
 
-## 📂 File Structure
+## File Structure
 ```
 project-folder/
 │
